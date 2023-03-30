@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 
 
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.List;
+
 @Entity
 @Table(name = "tb_order")
 public class Order {
@@ -19,6 +22,9 @@ public class Order {
 
     @OneToOne(mappedBy = "order", cascade =CascadeType.ALL )
     private Payment payment;
+
+    @OneToMany(mappedBy = "id.order")
+    private HashSet<OrderItem> itens = new HashSet<>();
 
     public Order (){}
 
@@ -68,5 +74,13 @@ public class Order {
 
     public void setPayment(Payment payment) {
         this.payment = payment;
+    }
+
+    public HashSet<OrderItem> getItens() {
+        return itens;
+    }
+
+    public List<Product> getProducts() {
+        return itens.stream().map(x -> x.getProduct()).toList();
     }
 }
